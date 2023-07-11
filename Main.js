@@ -5,22 +5,39 @@ function onClick(e) {
  	let y = e.offsetY;
 
 	//画面更新-1->0
- 	if (screen == -1) {
+ 	if (screen == -1 && name.value.length>0) {
+
+ 		if (confirm("あなたの名前は「"+name.value+"」でいいですか？")==false) {
+ 			return;
+ 		}
+
+		document.getElementById('name').style.visibility = 'hidden';
+		document.getElementById('next').style.display = 'inline';
+		document.getElementById('condition').style.display = 'inline';
+
+        var now_time = new Date();
+ 		all_start_time=now_time.getTime();
 
 		window.scrollTo(0,0);
 		context.clearRect(0, 0, 1500, 7000);
 		context.font = "24px sans-serif";
 		let sentences = ["本実験は顔認証パスワードで用いる顔画像の条件としてふさわしいものを調べるための実験です。",
-			"本実験で用いる顔認証システムでは、あなたに条件を考えてもらい、その条件を満たす画像を選択するというものです。",
-			"最初に500枚の画像からあなたの考える条件を満たす画像を5枚選択してください。",
-			"画像をクリックすることで画像の選択が可能であり、選択した画像は赤色になります。",
-			"選択をやり直す場合には、画像をもう一度クリックしてください。",
-			"条件を考えたらその条件を画面上部のテキストボックスに入力して、画面上部の「次に進む」をクリックしてください。",
-			"テキストボックスに入れる条件の文字数は64文字以下にしてください。"]
+			"本実験で用いる顔認証システムでは、あなたに条件を考えてもらい、その条件を満たす画像を選択するというものです。",			
+			"以下に示す500枚の画像を見て条件を考えたらその条件を画面上部のテキストボックスに入力して、",
+			"画面上部の「次に進む」をクリックしてください。"]
 
 		for (let i = 0; i < sentences.length; i++) {
 			context.fillText(sentences[i], 0, 24*i+24);
 			}
+
+        //画像描画
+        for (let i = 0; i < 500; i++) {
+            let img = new Image();
+            img.src = 'images/original/'+(i+1)+'.png';
+            img.onload = function(){
+                context.drawImage(img, i%10*imgsize, (Math.floor(i/10)+1)*imgsize, imgsize, imgsize);
+            }
+        }
 
 		document.getElementById('next').style.visibility = 'visible';
 		document.getElementById('condition').style.visibility = 'visible';
@@ -36,6 +53,9 @@ function onClick(e) {
         let number = Math.floor(y / imgsize) * 3 + Math.floor(x / imgsize) + 1;
         answer.push(number);
         screen++;
+        var now_time = new Date();
+        times.push(now_time.getTime()-start_time);
+
         if (screen > 125) {
         	context.clearRect(0, 0, 1500, 7000);
         	screen = 200;
@@ -83,6 +103,7 @@ function next() {
 		okchoose.draw();
 		document.getElementById('next').disabled = true;
 		document.getElementById('condition').style.visibility = 'hidden';
+		document.getElementById('next').display = false;
 		return;
  	}
 
@@ -175,6 +196,8 @@ function next() {
 
 		auth.draw();
 		document.getElementById('next').style.visibility = 'hidden';
+		var now_time = new Date();
+		start_time = now_time.getTime();
 		return ;
  	}
 
@@ -205,6 +228,27 @@ function next() {
 	        "再度実験を行う場合にはF5キーなどで画面を更新してください。"
 	        ]
 
+	    for (let i = 0; i < sentences.length; i++) {
+	        context.fillText(sentences[i], 0, 24*i+24);
+	        }
+
+	    var now_time = new Date();
+ 		all_time=now_time.getTime()-all_start_time;
+
+
+	    for (let i=0;i<25;i++) {
+	    	if (correct[i] == answer[i]) {
+	    		authentification.push([1, times[i+1]-times[i], ok_images[i], ok_images[i]]);
+	    	}
+	    	else {
+	    		authentification.push([0, times[i+1]-times[i], ok_images[i], ng_images[9*i+answer[i]-1]]);
+	    	}
+	    	
+	    }
+
+	    //実験参加者の名前
+	    console.log(name.value);
+
 	    //ユーザーの選んだ画像番号
 	    console.log(ok_choose);
 	    console.log(ng_choose);
@@ -218,15 +262,43 @@ function next() {
 	    console.log(correct);
 	    console.log(answer);
 
-	    //正解・不正解, 間違えた画像名、正解画像名も出力する
-	    //認証時間測定もするか?
-	    //ブラウザ情報の取得?
-	    //最初に条件を表示させる?/条件を覚えておいてください/条件の表示はさせない
-	    //2回入力してもらうかも
+	    //ユーザーの考えた条件
+	    console.log(condition.value);
 
-	    for (let i = 0; i < sentences.length; i++) {
-	        context.fillText(sentences[i], 0, 24*i+24);
-	        }
+	    //認証実験情報(正解不正解、認証時間、正解画像、ユーザー選択画像)
+	    console.log(authentification);
+
+	    //総時間
+	    console.log(all_time);
+
+	    //どこかのサーバーに適当に投げる
+	    //研究室のサーバーが良いか？→とりあえずこれをやってみる
+	    //最初の条件記入の段階でも画像を提示する
+
+	    //クラウドで行うときは技術背景なども聞く
+
+
+	    //送信データ
+	    var data = [name.value, ok_choose, ng_choose, confirm_choose, ok_images, ng_images, correct, answer, condition.value, authentification, all_time];
+	    var json_data = JSON.stringify(data);
+	 
+	    //送信データ
+	    let xhr = new XMLHttpRequest;
+
+	    //送信成功
+	    xhr.onload = function(){
+	        var res = xhr.responseText;
+	        console.log(res);
+	    };
+	    //送信エラー
+	    xhr.onerror = function(){
+	    	var res = xhr.responseText;
+	    	console.log(res);
+	        alert("データが送信できませんでした。");
+	    }
+	    xhr.open('post', "api_sendjson.php", true);
+	    xhr.setRequestHeader('Content-Type', 'application/json');
+	    xhr.send(json_data);
 
  	}
 	
@@ -249,11 +321,28 @@ let ng_images = [];
 let correct = [];
 let answer = [];
 
+//認証回答時間
+let times = [0];
+let start_time;
+
+//実験開始時間
+let all_start_time;
+//実験総時間
+let all_time;
+
+
+//認証情報
+let authentification = [];
+
 //初期画面
-context.font = "48px sans-serif";
-context.fillText("画面をクリックしてください", 0, 50);
+context.font = "24px sans-serif";
+context.fillText("テキストボックスにあなたの名前を入れ画面をクリックしてください。", 0, 36);
+
 document.getElementById('next').style.visibility = 'hidden';
 document.getElementById('condition').style.visibility = 'hidden';
+
+document.getElementById('next').style.display = 'none';
+document.getElementById('condition').style.display = 'none';
 
 //screen0におけるテキストボックス表示
 let condition = document.getElementById("condition");
@@ -265,3 +354,6 @@ condition.addEventListener("input", function(){
 		document.getElementById('next').disabled = true;
 	}
 	});
+
+//実験参加者の名前
+let name = document.getElementById("name");

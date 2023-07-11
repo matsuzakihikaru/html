@@ -38,8 +38,8 @@ class OkChoose {
 
         context.globalAlpha = 1;
         context.fillStyle = "black";
-        context.clearRect(0, 24*2+2, 1500, 24);
-        context.fillText("画像選択枚数:"+ok_choose.length, 0, 24*3);
+        context.clearRect(0, 24*3+2, 1500, 24);
+        context.fillText("画像選択枚数:"+ok_choose.length, 0, 24*4);
 
         if (ok_choose.length == 5) {
             setTimeout(function(){window.alert("5枚の画像が選択されました。問題がなければ画面上部の「次に進む」ボタンを押してください。")}, 1);
@@ -56,9 +56,10 @@ class OkChoose {
 
         //文字表示
         context.font = "24px sans-serif";
-        context.fillText("条件を満たす画像を選択してください。", 0, 24);
-        context.fillText("5枚の画像を選択したら画面上部の「次に進む」ボタンを押してください", 0, 24*2);
-        context.fillText("画像選択枚数:"+ok_choose.length, 0, 24*3);
+        context.fillText("条件を満たす画像をクリックして選択してください。選択された画像は赤色になります。", 0, 24);
+        context.fillText("5枚の画像を選択したら画面上部の「次に進む」ボタンを押してください。", 0, 24*2);
+        context.fillText("選択をやり直す場合には、画像をもう一度クリックしてください。", 0, 24*3);
+        context.fillText("画像選択枚数:"+ok_choose.length, 0, 24*4);
 
         //画像描画
         for (let i = 0; i < 500; i++) {
