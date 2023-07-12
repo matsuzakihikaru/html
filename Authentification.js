@@ -7,6 +7,9 @@ class Authentification {
 
 		context.clearRect(0, 0, 1500, 7000);
 
+        context.font = "24px sans-serif";
+        context.fillText("最も条件を満たす画像をクリックしてください " +(turn+1)+" / 25枚目 ", 0, 128*3+24);
+
 		//画像描画
 	    for (let i = 0; i < 9; i++) {
 	        let img = new Image();

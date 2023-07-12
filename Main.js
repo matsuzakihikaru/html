@@ -150,7 +150,8 @@ function next() {
 	        "それではこれから25回のパスワード認証を行います。",
 	        "1回のパスワード認証では8枚の条件を満たさない画像と1枚の条件を満たす画像の計9枚が表示されます。",
 	        "9枚の中から最も条件を満たすと思われる画像を1枚選択してクリックしてください。",
-	        "1枚の画像をクリックしたら自動的に次の画像が表示されます。"
+	        "1枚の画像をクリックしたら自動的に次の画像が表示されます。",
+	        "選択のやり直しは出来ないためご注意ください。"
 	        ]
 
 	    for (let i = 0; i < sentences.length; i++) {
@@ -277,12 +278,11 @@ function next() {
 
 	    //クラウドで行うときは技術背景なども聞く
 
-
 	    //送信データ
 	    var data = [name.value, ok_choose, ng_choose, confirm_choose, ok_images, ng_images, correct, answer, condition.value, authentification, all_time];
 	    var json_data = JSON.stringify(data);
 
-		fetch("https://script.google.com/macros/s/AKfycbzUMFbVv-EdrpbvtdB4xfWOS3LzT6pf099g1hojVADC/dev" , {
+		fetch("https://script.google.com/macros/s/AKfycbw6-2hQBWAx143Iq48EqRz11oXmhkC9U9NxYtYPMxwbSf2TJpyTARqTDvRLSptEKaU_Ew/exec" , {
 			method: "POST",
 			body: json_data,
 			mode: 'no-cors',
@@ -290,8 +290,6 @@ function next() {
 		}).then((data) => {
 	    	console.log(data);
 	  	});;
-
-		console.log("finished");
 
  	}
 	
