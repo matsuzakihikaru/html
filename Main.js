@@ -281,24 +281,17 @@ function next() {
 	    //送信データ
 	    var data = [name.value, ok_choose, ng_choose, confirm_choose, ok_images, ng_images, correct, answer, condition.value, authentification, all_time];
 	    var json_data = JSON.stringify(data);
-	 
-	    //送信データ
-	    let xhr = new XMLHttpRequest;
 
-	    //送信成功
-	    xhr.onload = function(){
-	        var res = xhr.responseText;
-	        console.log(res);
-	    };
-	    //送信エラー
-	    xhr.onerror = function(){
-	    	var res = xhr.responseText;
-	    	console.log(res);
-	        alert("データが送信できませんでした。");
-	    }
-	    xhr.open('post', "api_sendjson.php", true);
-	    xhr.setRequestHeader('Content-Type', 'application/json');
-	    xhr.send(json_data);
+		fetch("https://script.google.com/macros/s/AKfycbzUMFbVv-EdrpbvtdB4xfWOS3LzT6pf099g1hojVADC/dev" , {
+			method: "POST",
+			body: json_data,
+			mode: 'no-cors',
+			headers: {"Content-Type": "application/json"}
+		}).then((data) => {
+	    	console.log(data);
+	  	});;
+
+		console.log("finished");
 
  	}
 	
