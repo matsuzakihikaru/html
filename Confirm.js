@@ -46,9 +46,16 @@ class Confirm {
 
         //文字表示
         context.font = "24px sans-serif";
-        context.fillText("条件を満たさない画像を選択してください。", 0, 24);
-        context.fillText("すべての条件を満たさない画像を選択したら画面上部の「次に進む」ボタンを押してください。", 0, 24*2);
-        context.fillText("1枚も選ばなくてもかまいません。", 0, 24*3);   
+        context.fillText("これが最後の手順です。以下に先ほど見せた画像のうち条件を満たす25枚の画像を表示します。", 0, 24);
+        context.fillText("この中で条件を　　　　　と思われる画像を選択してください。", 0, 24*2);
+
+        //青字
+        context.fillStyle = "blue";
+        context.fillText("満たさない", 24*7, 24*2);
+        context.fillStyle = "black";
+
+        context.fillText("すべての条件を満たさない画像を選択したら画面上部の「次に進む」ボタンを押してください。", 0, 24*3);
+        context.fillText("1枚も選ばなくてもかまいません。", 0, 24*4);   
 
         canvas.addEventListener('click', this.onClick, false);
     }

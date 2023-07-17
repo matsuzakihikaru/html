@@ -37,8 +37,8 @@ class NgChoose {
 
         context.globalAlpha = 1;
         context.fillStyle = "black";
-        context.clearRect(0, 24*2+2, 1500, 24);
-        context.fillText("画像選択枚数:"+ng_choose.length, 0, 24*3);
+        context.clearRect(0, 24*3+2, 1500, 24);
+        context.fillText("画像選択枚数:"+ng_choose.length, 0, 24*4);
 
         if (ng_choose.length == 15) {
             setTimeout(function(){window.alert("15枚の画像が選択されました。問題がなければ画面上部の「次に進む」ボタンを押してください。")}, 1);
@@ -54,9 +54,16 @@ class NgChoose {
 
         //文字表示
         context.font = "24px sans-serif";
-        context.fillText("条件を満たさない画像を選択してください。", 0, 24);
-        context.fillText("15枚の画像を選択したら画面上部の「次に進む」ボタンを押してください", 0, 24*2);
-        context.fillText("画像選択枚数:"+ng_choose.length, 0, 24*3);
+        context.fillText("次に条件を　　　　　画像を選択してください。", 0, 24);
+
+        //青字
+        context.fillStyle = "blue";
+        context.fillText("満たさない", 24*5, 24);
+        context.fillStyle = "black";
+
+        context.fillText("画像をクリックすることで画像の選択が可能であり、選択した画像は青色になります。", 0, 24*2);
+        context.fillText("15枚の画像を選択したら画面上部の「次に進む」ボタンを押してください", 0, 24*3);
+        context.fillText("画像選択枚数:"+ng_choose.length, 0, 24*4);
 
         //画像描画
         for (let i = 0; i < 500; i++) {

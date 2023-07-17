@@ -6,43 +6,7 @@ function onClick(e) {
 
 	//画面更新-1->0
  	if (screen == -1 && name.value.length>0) {
-
- 		if (confirm("あなたの名前は「"+name.value+"」でいいですか？")==false) {
- 			return;
- 		}
-
-		document.getElementById('name').style.visibility = 'hidden';
-		document.getElementById('next').style.display = 'inline';
-		document.getElementById('condition').style.display = 'inline';
-
-        var now_time = new Date();
- 		all_start_time=now_time.getTime();
-
-		window.scrollTo(0,0);
-		context.clearRect(0, 0, 1500, 7000);
-		context.font = "24px sans-serif";
-		let sentences = ["本実験は顔認証パスワードで用いる顔画像の条件としてふさわしいものを調べるための実験です。",
-			"本実験で用いる顔認証システムでは、あなたに条件を考えてもらい、その条件を満たす画像を選択するというものです。",			
-			"以下に示す500枚の画像を見て条件を考えたらその条件を画面上部のテキストボックスに入力して、",
-			"画面上部の「次に進む」をクリックしてください。"]
-
-		for (let i = 0; i < sentences.length; i++) {
-			context.fillText(sentences[i], 0, 24*i+24);
-			}
-
-        //画像描画
-        for (let i = 0; i < 500; i++) {
-            let img = new Image();
-            img.src = 'images/original/'+(i+1)+'.png';
-            img.onload = function(){
-                context.drawImage(img, i%10*imgsize, (Math.floor(i/10)+1)*imgsize, imgsize, imgsize);
-            }
-        }
-
-		document.getElementById('next').style.visibility = 'visible';
-		document.getElementById('condition').style.visibility = 'visible';
-		document.getElementById('next').disabled = true;
- 		screen++;
+ 		name_input();
  	}
 
 	//画面更新(101->102 ... 125->126 -> 200)
@@ -59,26 +23,9 @@ function onClick(e) {
         if (screen > 125) {
         	context.clearRect(0, 0, 1500, 7000);
         	screen = 200;
+        	//画面更新
+        	next();
         	document.getElementById('next').style.visibility = 'visible';
-
-		    context.clearRect(0, 0, 1500, 7000);
-
-		    context.globalAlpha = 1;
-		    window.scrollTo(0,0);
-		    context.fillStyle = "black"
-		    context.font = "24px sans-serif";
-		    let sentences = [
-		        "これが最後の手順です。",
-		        "今から一度に先ほど見せた画像のうち条件を満たす25枚の画像を表示します。",
-		        "この中で条件を満たさないものがあればクリックしてください。",
-		        ]
-
-		    // console.log(answer);
-
-		    for (let i = 0; i < sentences.length; i++) {
-		        context.fillText(sentences[i], 0, 24*i+24);
-		        }
-
 	        }
         else {
         	auth.draw();
@@ -107,36 +54,19 @@ function next() {
 		return;
  	}
 
-	//画面更新1->2
+	//画面更新1->3 (画面2は取り除いた)
  	if (screen == 1) {
- 		screen++;
+ 		screen+=2;
 		window.scrollTo(0,0);
 	    context.globalAlpha = 1;
 	    context.fillStyle = "black"
 	    context.clearRect(0, 0, 1500, 7000);
 	    context.font = "24px sans-serif";
-	    let sentences = [
-	        "次に500枚の画像からあなたの考える条件を満たさない画像を15枚選択してください。",
-	        "条件を満たさない画像であることと15枚選択することに注意してください。",
-	        "画像をクリックすることで画像の選択が可能であり、選択した画像は青色になります。",
-	        "選択をやり直す場合には、画像をもう一度クリックしてください。",
-	        ]
-
-	    for (let i = 0; i < sentences.length; i++) {
-	        context.fillText(sentences[i], 0, 24*i+24);
-	        }
-	    return;
-	 	}
-
-	//画面更新2->3
- 	if (screen == 2) {
- 		context.clearRect(0, 0, 1500, 7000);
- 		screen++;
-		let ngchoose = new NgChoose();
+	    let ngchoose = new NgChoose();
 		ngchoose.draw();
 		document.getElementById('next').disabled = true;
-		return;
- 	}
+	    return;
+	 	}
 
 	//画面更新3->4
  	if (screen == 3) {
@@ -148,9 +78,9 @@ function next() {
 	    context.font = "24px sans-serif";
 	    let sentences = [
 	        "それではこれから25回のパスワード認証を行います。",
-	        "1回のパスワード認証では8枚の条件を満たさない画像と1枚の条件を満たす画像の計9枚が表示されます。",
-	        "9枚の中から最も条件を満たすと思われる画像を1枚選択してクリックしてください。",
-	        "1枚の画像をクリックしたら自動的に次の画像が表示されます。",
+	        "1回のパスワード認証では9枚の顔画像が表示されます。",
+	        "9枚の中から最も条件を満たすと思われる顔画像を1枚選択してクリックしてください。",
+	        "画像を選択したら自動的に次の画像が表示されます。",
 	        "選択のやり直しは出来ないためご注意ください。"
 	        ]
 
@@ -327,7 +257,7 @@ let authentification = [];
 
 //初期画面
 context.font = "24px sans-serif";
-context.fillText("テキストボックスにあなたの名前を入れ画面をクリックしてください。", 0, 36);
+context.fillText("テキストボックスにあなたの名前を入れ画面をクリックするかEnterキーを押してください。", 0, 36);
 
 document.getElementById('next').style.visibility = 'hidden';
 document.getElementById('condition').style.visibility = 'hidden';
@@ -348,3 +278,57 @@ condition.addEventListener("input", function(){
 
 //実験参加者の名前
 let name = document.getElementById("name");
+
+//初期画面の名前入力
+name.addEventListener('keypress', function(e){
+	//エンターキーを押す
+  	if (e.keyCode === 13) {
+		name_input();
+	}  
+});
+
+//名前入力
+function name_input() {
+
+	//画面更新-1->0
+ 	if (screen == -1 && name.value.length>0) {
+
+ 		if (confirm("あなたの名前は「"+name.value+"」でいいですか？")==false) {
+ 			return;
+ 		}
+
+		document.getElementById('name').style.visibility = 'hidden';
+		document.getElementById('next').style.display = 'inline';
+		document.getElementById('condition').style.display = 'inline';
+
+        var now_time = new Date();
+ 		all_start_time=now_time.getTime();
+
+		window.scrollTo(0,0);
+		context.clearRect(0, 0, 1500, 7000);
+		context.font = "24px sans-serif";
+		let sentences = ["本実験は顔認証パスワードで用いる顔画像の条件としてふさわしいものを調べるための実験です。",
+			"本実験で用いる顔認証システムでは、あなたに条件を考えてもらい、その条件を満たす画像を選択するというものです。",			
+			"以下に示す500枚の画像を見て条件を考えたらその条件を画面上部のテキストボックスに入力して、",
+			"画面上部の「次に進む」をクリックしてください。"]
+
+		for (let i = 0; i < sentences.length; i++) {
+			context.fillText(sentences[i], 0, 24*i+24);
+			}
+
+        //画像描画
+        for (let i = 0; i < 500; i++) {
+            let img = new Image();
+            img.src = 'images/original/'+(i+1)+'.png';
+            img.onload = function(){
+                context.drawImage(img, i%10*imgsize, (Math.floor(i/10)+1)*imgsize, imgsize, imgsize);
+            }
+        }
+
+		document.getElementById('next').style.visibility = 'visible';
+		document.getElementById('condition').style.visibility = 'visible';
+		document.getElementById('next').disabled = true;
+ 		screen++;
+ 	}
+
+}
