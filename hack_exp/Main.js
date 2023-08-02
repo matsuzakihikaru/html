@@ -118,14 +118,12 @@ function next() {
 	    	console.log(data);
 	  	});;
 
-		window.scrollTo(0,0);
-		context.clearRect(0, 0, 1500, 700);
 		context.font = "24px sans-serif";
 		let sentences = [
 			"これで実験は終了です。お疲れ様でした。"]
 
 		for (let i = 0; i < sentences.length; i++) {
-			context.fillText(sentences[i], 0, 24*i+24);
+			context.fillText(sentences[i], 0, 24*i+72);
 			}
 
 		document.getElementById('next').style.visibility = 'hidden';		
