@@ -13,10 +13,10 @@ class Hack {
         context.fillText((pass+1)+" / 14 パスワード ", 0, 128*3+48);
 
         if (pass==0) {
-        	context.fillText("これは練習です。条件は「前髪で額が隠れている人」です。", 0, 128*3+72);
+        	context.fillText("条件は「前髪で額が隠れている人」です。", 0, 128*3+72);
         }
         if (pass==7) {
-        	context.fillText("これは練習です。条件は「髪がパーマの人」です。", 0, 128*3+72);
+        	context.fillText("条件は「髪がパーマの人」です。", 0, 128*3+72);
         }        
 
 		//画像描画

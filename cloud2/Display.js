@@ -13,10 +13,10 @@ class Display {
         context.fillText((pass+1)+" / 14 パスワード ", 0, 128*3+48);
 
         if (pass==0) {
-        	context.fillText("これは練習です。条件は「前髪で額が隠れている人」です。", 0, 128*3+72);
+        	context.fillText("条件は「前髪で額が隠れている人」です。", 0, 128*3+72);
         }
         if (pass==7) {
-        	context.fillText("これは練習です。条件は「髪がパーマの人」です。", 0, 128*3+72);
+        	context.fillText("条件は「髪がパーマの人」です。", 0, 128*3+72);
         }
 
 		//画像描画
@@ -45,11 +45,18 @@ class Display {
  			limit = auth_limit[rand[Math.floor(screen/20)-2]];
  		}
 
+	    let tl_limit = 100;
+
+	    //tl 1条件目と8条件目は0.5秒の赤枠表示
+	    if (pass == 0 || pass == 7) {
+	    	tl_limit = 500;
+	    }
+
 	    setTimeout(function(){
     	context.strokeStyle = "red";
         context.lineWidth = 6;
         context.strokeRect(i%3*imgsize, Math.floor(i/3)*imgsize, imgsize, imgsize);
-    	}, limit-100);
+    	}, limit-tl_limit);
 
 	    canvas.addEventListener('click', this.onClick, false);
 	}

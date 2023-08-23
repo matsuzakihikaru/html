@@ -40,7 +40,7 @@ function onClick(e) {
 			context.font = "24px sans-serif";
 			let sentences = ["推測した条件を入力してください。",
 				"条件がまったく分からなかった場合には、「不明」などの単語を入力してください。",			
-				"次に進むを押すと正解の条件と認証正解数が表示されます。"]
+				"次に進むを押すと認証正解数が表示されます。"]
 
 			for (let i = 0; i < sentences.length; i++) {
 				context.fillText(sentences[i], 0, 24*i+24);
@@ -61,19 +61,19 @@ function next() {
  	if (screen%20 <= 3 & screen<280) {
 
  		if (screen%20 == 0 & screen/20 == 0) {
- 			if (confirm("次のパスワード認証に進んでいいですか？　次のパスワードの条件は「前髪で額が隠れている人」です。") == false) {
+ 			if (confirm("次の画像パスワード認証に進んでいいですか？　次のパスワードの条件は「前髪で額が隠れている人」です。") == false) {
  				return
  			};
  		}
 
  		else if (screen%20 == 0 & screen/20 == 7) {
- 			if (confirm("次のパスワード認証に進んでいいですか？　次のパスワードの条件は「髪がパーマの人」です。") == false) {
+ 			if (confirm("次の画像パスワード認証に進んでいいですか？　次のパスワードの条件は「髪がパーマの人」です。") == false) {
  				return
  			};
  		}
 
  		else if (screen%20 == 0) {
- 			if (confirm("次のパスワード認証に進んでいいですか？　次のパスワードの条件は自分で推測してください。") == false) {
+ 			if (confirm("次の画像パスワード認証に進んでいいですか？　次のパスワードの条件は自分で推測してください。") == false) {
  				return
  			};
  		}		
@@ -115,8 +115,7 @@ function next() {
 
  			context.clearRect(0, 0, 1500, 700);
 			context.font = "24px sans-serif";
-			let sentences = ["正解の条件 : "+all_data[pass][0],
-				"認証正解数 "+point+"/8"]
+			let sentences = ["認証正解数 "+point+"/8"]
 			for (let i = 0; i < sentences.length; i++) {
 				context.fillText(sentences[i], 0, 24*i+24);
 				}
@@ -148,11 +147,30 @@ function next() {
 		context.font = "24px sans-serif";
 		let sentences = [
 			"これで実験は終了です。お疲れ様でした。",
-			"Google Formの提出をお願いします。"]
+			"認証用コードは、「knjs」になります。ランサーズ上の実験後アンケートに回答してください。",
+			"認証用コードはこのページを閉じると二度と表示出来なくなるので注意してください。",
+			"なお、正解の条件は以下のようになります。"];
 
 		for (let i = 0; i < sentences.length; i++) {
 			context.fillText(sentences[i], 0, 24*i+72);
 			}
+
+		for (let i = 0; i < 14; i++) {
+			var str;
+			if (i == 0) {
+				str = "前髪で額が隠れている人";
+			}
+			else if (i < 7) {
+				str = data[rand[i-1]][0];
+			}
+			else if (i == 7) {
+				str = "髪がパーマの人";
+			}
+			else {
+				str = data[rand[i-2]][0];
+			}
+			context.fillText((i+1)+"種類目の条件："+str+" 認証正解数："+points[i]+"/8", 0, 24*i+72+120);
+		}
 
 		document.getElementById('next').style.visibility = 'hidden';		
 
@@ -293,7 +311,7 @@ let auth_time = [];
 
 //初期画面
 context.font = "24px sans-serif";
-context.fillText("テキストボックスにあなたの名前を入れ画面をクリックするかEnterキーを押してください。", 0, 36);
+context.fillText("テキストボックスにあなたのユーザーIDを入れ画面をクリックするかEnterキーを押してください。", 0, 36);
 
 document.getElementById('next').style.visibility = 'hidden';
 document.getElementById('next').style.display = 'none';
@@ -324,7 +342,7 @@ function name_input() {
 	//画面更新-1->0
  	if (screen == -1 && name.value.length>0) {
 
- 		if (confirm("あなたの名前は「"+name.value+"」でいいですか？")==false) {
+ 		if (confirm("あなたのユーザーIDは「"+name.value+"」でいいですか？")==false) {
  			return;
  		}
 
@@ -338,12 +356,15 @@ function name_input() {
 		context.clearRect(0, 0, 1500, 700);
 		context.font = "24px sans-serif";
 		let sentences = [
-			"最初に4例のパスワードが表示されます。赤枠で囲まれた画像1枚のみがある条件を満たします。",
-			"ただし赤枠は画像表示から1.7秒後から0.1秒間のみ表示されます。画像表示から1.8秒経過すると自動的に次の画像が表示されます。",	
-			"その後、条件を推測して、残り8例のパスワードの認証を行ってください。パスワード認証では時間制限はありません",
+			"最初に4例の画像パスワードが表示されます。",
+			"9枚の画像の内、赤枠で囲まれた画像1枚のみがある条件を満たします。",
+			"ただし赤枠は画像表示の1.7秒後から0.1秒間のみ表示されます。画像表示から1.8秒経過すると自動的に次の画像が表示されます。",
+			"その後、条件を推測して、残り8例の画像パスワード認証を行ってください。画像パスワード認証では時間制限はありません。",
+			"画像パスワード認証では、条件を満たす画像をクリックすることで認証を行います。",
+			"条件がわからない場合、どれでもいいので1枚の画像をクリックしてください。",
 			"画面上部の「次に進む」をクリックすると実験が開始します。",
 			"なお実験は14種類のパスワードで実施します。",
-			"練習のため、1種類目のパスワードと8種類目のパスワードについてはパスワード条件を事前に告知します。"]
+			"1種類目のパスワードと8種類目のパスワードについてはパスワード条件を事前に告知し、赤枠の表示時間が0.5秒となります。"]
 
 		for (let i = 0; i < sentences.length; i++) {
 			context.fillText(sentences[i], 0, 24*i+24);
@@ -353,4 +374,8 @@ function name_input() {
  		screen++;
  	}
 
+}
+
+window.onbeforeunload = function(e) {
+    e.returnValue = "ページを離れようとしています。よろしいですか？";
 }
