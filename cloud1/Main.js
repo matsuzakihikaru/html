@@ -12,7 +12,7 @@ function onClick(e) {
 	//画面4->5 ... 11->12 ->20
  	if (0 <= x && x < imgsize*3 && 0 <= y && y < imgsize*3 && screen%20 >= 4 && screen%20 <= 11) {
 
- 		context.clearRect(0, 0, 1500, 700);
+ 		context.clearRect(0, 0, 1500, 1000);
         let x = e.offsetX;
         let y = e.offsetY;
         let number = Math.floor(y / imgsize) * 3 + Math.floor(x / imgsize) + 1;
@@ -37,7 +37,7 @@ function onClick(e) {
 
      		//screen%20==12
 			window.scrollTo(0,0);
-			context.clearRect(0, 0, 1500, 700);
+			context.clearRect(0, 0, 1500, 1000);
 
 			condition.style.visibility = 'visible';
 			condition.value = "";
@@ -86,7 +86,7 @@ function next() {
  			};
  		}		
 
- 		context.clearRect(0, 0, 1500, 700);
+ 		context.clearRect(0, 0, 1500, 1000);
 		let display = new Display();
 		display.draw();
  		screen++;
@@ -100,7 +100,7 @@ function next() {
  	if (screen%20 == 4 & screen<280) {
 
         n_time = new Date();
- 		context.clearRect(0, 0, 1500, 700);
+ 		context.clearRect(0, 0, 1500, 1000);
 		let hack = new Hack();
 		hack.draw();
 		document.getElementById('next').style.visibility = 'hidden';
@@ -131,7 +131,7 @@ function next() {
  			document.getElementById('confidence').value=0;
  			document.getElementById('confidence').style.display='none';
 
- 			context.clearRect(0, 0, 1500, 700);
+ 			context.clearRect(0, 0, 1500, 1000);
 			context.font = "24px sans-serif";
 			let sentences = ["正解の条件 : "+all_data[pass][0],
 							"認証正解数 "+point+"/8"]
@@ -172,8 +172,8 @@ function next() {
 		context.font = "24px sans-serif";
 		let sentences = [
 			"これで実験は終了です。お疲れ様でした。",
-			"認証用コードは、「knjs」になります。ランサーズ上の実験後アンケートに回答してください。",
-			"認証用コードはこのページを閉じると二度と表示出来なくなるので注意してください。",
+			"確認コードは、「knjs」になります。ランサーズ上の実験後アンケートに回答してください。",
+			"確認コードはこのページを閉じると二度と表示出来なくなるので注意してください。",
 			"なお、正解の条件は以下のようになります。"];
 
 		for (let i = 0; i < sentences.length; i++) {
@@ -194,7 +194,7 @@ function next() {
 			else {
 				str = data[rand[i-2]][0];
 			}
-			context.fillText((i+1)+"種類目の条件："+str+" 認証正解数："+points[i]+"/8", 0, 24*i+72+120);
+			context.fillText((i+1)+"セット目の条件："+str+" 認証正解数："+points[i]+"/8", 0, 24*i+72+120);
 		}
 
 		document.getElementById('next').style.visibility = 'hidden';		
@@ -336,7 +336,7 @@ let auth_time = [];
 
 //初期画面
 context.font = "24px sans-serif";
-context.fillText("テキストボックスにあなたのユーザーIDを入れ画面をクリックするかEnterキーを押してください。", 0, 36);
+context.fillText("テキストボックスにあなたのユーザー名を入れ画面をクリックするかEnterキーを押してください。", 0, 36);
 
 document.getElementById('next').style.visibility = 'hidden';
 document.getElementById('next').style.display = 'none';
@@ -373,7 +373,7 @@ function name_input() {
 	//画面更新-1->0
  	if (screen == -1 && name.value.length>0) {
 
- 		if (confirm("あなたのユーザーIDは「"+name.value+"」でいいですか？")==false) {
+ 		if (confirm("あなたのユーザー名は「"+name.value+"」でいいですか？")==false) {
  			return;
  		}
 
@@ -384,22 +384,39 @@ function name_input() {
  		all_start_time=now_time.getTime();
 
 		window.scrollTo(0,0);
-		context.clearRect(0, 0, 1500, 700);
+		context.clearRect(0, 0, 1500, 1000);
 		context.font = "24px sans-serif";
 		let sentences = [
-			"最初に4例の画像パスワードが表示されます。",
-			"9枚の画像の内、赤枠で囲まれた画像1枚のみがある条件を満たします。",
-			"ただし赤枠は画像表示の1.7秒後から0.1秒間のみ表示されます。画像表示から1.8秒経過すると自動的に次の画像が表示されます。",
-			"その後、条件を推測して、残り8例の画像パスワード認証を行ってください。画像パスワード認証では時間制限はありません。",
-			"画像パスワード認証では、条件を満たす画像をクリックすることで認証を行います。",
+			"「画像パスワード認証」の画面には9枚の顔画像が並んでいます。（左下図）",
+			"9枚の画像の内、ある条件を満たす「画像パスワード」が1枚だけあります。",
+			"画像パスワードには一瞬だけ赤い枠が表示されます。これは、操作している人が画像パスワードをクリックしたということです。（右下図）",
+			"9枚の画像は4組続けて表示されます。どの組にも、同じ条件を満たす画像パスワードが1枚だけあります。",
+			"クリックされた画像を手がかりに、画像パスワードの条件を推測してください。",
+			"その後、あなたが推測した条件を使って画像パスワード認証を行ってください。",
+			"同じように9枚の顔画像が表示されるので、条件を満たす画像パスワードをクリックしてください。",
 			"条件がわからない場合、どれでもいいので1枚の画像をクリックしてください。",
-			"画面上部の「次に進む」をクリックすると実験が開始します。",
-			"なお実験は14種類のパスワードで実施します。",
-			"1種類目のパスワードと8種類目のパスワードについてはパスワード条件を事前に告知し、赤枠の表示時間が0.5秒となります。"]
+			"ただし、条件が画面に表示されている場合もあります。",
+			"その場合は、あなたが推測した条件ではなく、表示されている条件を満たす画像パスワードをクリックしてください。",
+			"あなたが操作するときは、9枚の画像が8組表示されます。どの組にも、同じ条件を満たす画像パスワードが1枚だけあります。",
+			"その後、あなたが推測した条件と推測の自信度を回答してください。",
+			"「条件の推測」と「あなたの操作」を1セットとして、14セットの実験を行います。画像パスワードの条件はセットごとに異なります。",
+			"説明を理解したら、画面上部の「次に進む」をクリックして実験を開始してください。"]
 
 		for (let i = 0; i < sentences.length; i++) {
 			context.fillText(sentences[i], 0, 24*i+24);
 			}
+
+			let img = new Image();
+	        img.src = "./fig1.png";
+	        
+	        img.onload = function(){
+	            context.drawImage(img, 200, 400, imgsize*3, imgsize*3);}
+
+	        let img2 = new Image();
+	        img2.src = "./fig2.png";
+	        
+	        img2.onload = function(){
+	            context.drawImage(img2, imgsize*3+400, 400, imgsize*3, imgsize*3);}
 
 		document.getElementById('next').style.visibility = 'visible';
  		screen++;
