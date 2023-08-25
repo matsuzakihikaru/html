@@ -28,6 +28,12 @@ function onClick(e) {
 			hack.draw();
         }
         else{
+			let pass = Math.floor(screen / 20);
+			if (pass == 0 || pass == 7) {
+				document.getElementById('next').style.visibility = 'visible';
+				next();
+				return;
+			}
 
      		//screen%20==12
 			window.scrollTo(0,0);
@@ -37,10 +43,12 @@ function onClick(e) {
 			condition.value = "";
 			document.getElementById('next').style.visibility = 'visible';
 
+			document.getElementById('confidence').style.display = 'inline';
+
 			context.font = "24px sans-serif";
-			let sentences = ["推測した条件を入力してください。",
+			let sentences = ["推測した条件を入力し、予測の自信度を選択してください。",
 				"条件がまったく分からなかった場合には、「不明」などの単語を入力してください。",			
-				"次に進むを押すと認証正解数が表示されます。"]
+				"次に進むを押すと正解の条件と認証正解数が表示されます。"]
 
 			for (let i = 0; i < sentences.length; i++) {
 				context.fillText(sentences[i], 0, 24*i+24);
@@ -109,7 +117,12 @@ function next() {
 
  	if (screen%20 == 12 & screen<280) {
  		let pass = Math.floor(screen / 20);
- 		if (confirm("推測した条件は「"+condition.value+"」でいいですか？")==true) {
+		if (document.getElementById('confidence').value == 0 && pass!=0 && pass!=7) {
+			alert("自信度を選択してください。");
+			return
+		};
+
+ 		if (pass==0 || pass==7 || confirm("推測した条件は「"+condition.value+"」でいいですか？")==true) {
  			let correct = all_data[pass][3].slice(4,12);
  			let point = 0;
  			for (let i=0; i<8; i++) {
@@ -121,15 +134,27 @@ function next() {
  			condition.style.visibility = 'hidden';
  			screen+=8;
 
+ 			confs.push(document.getElementById('confidence').value);
+
+ 			document.getElementById('confidence').value=0;
+ 			document.getElementById('confidence').style.display='none';
+
  			context.clearRect(0, 0, 1500, 700);
 			context.font = "24px sans-serif";
-			let sentences = ["認証正解数 "+point+"/8"]
+			let sentences = ["正解の条件 : "+all_data[pass][0],
+							"認証正解数 "+point+"/8"]
 			for (let i = 0; i < sentences.length; i++) {
 				context.fillText(sentences[i], 0, 24*i+24);
 				}
 
 			points.push(point);
-			conditions.push(condition.value);
+
+			if (pass==0 || pass==7) {
+				conditions.push("N");
+			}
+			else{
+				conditions.push(condition.value);
+			}
 
  			// return;
  		}
@@ -140,10 +165,10 @@ function next() {
  		all_time=now_time.getTime()-all_start_time;
 
 	    //送信データ
-	    var dt = [name.value, points, answer, conditions, rand, rev_rand, times, all_time];
+	    var dt = [name.value, points, answer, conditions, rand, rev_rand, times, all_time, confs];
 	    var json_data = JSON.stringify(dt);
 
-		fetch("https://script.google.com/macros/s/AKfycbwia--k49gA-WPqqpqMTSsIUWgPLaqjxwNlDv6UFW2CnGOiwsauQCvft9OTVcGrkFG0gg/exec" , {
+		fetch("https://script.google.com/macros/s/AKfycbx_uYSkQw8Tvoh0Y4ZSbM62oHDui_UJw3Wf58CqcpSh7_0PzvKA2aBoRvV8DJ-eNX-woQ/exec" , {
 			method: "POST",
 			body: json_data,
 			mode: 'no-cors',
@@ -327,6 +352,9 @@ context.fillText("テキストボックスにあなたのユーザーIDを入れ
 document.getElementById('next').style.visibility = 'hidden';
 document.getElementById('next').style.display = 'none';
 
+//確信度
+document.getElementById('confidence').style.display = 'none';
+
 //実験参加者の名前
 let name = document.getElementById("name");
 
@@ -338,6 +366,9 @@ let conditions = [];
 
 //point
 let points = [];
+
+//自信度
+let confs = [];
 
 //初期画面の名前入力
 name.addEventListener('keypress', function(e){

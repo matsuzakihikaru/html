@@ -12,6 +12,18 @@
     <input type="text" id="name" maxlength=64 size=64 placeholder="あなたのユーザーIDを入力してください。"> 
     <input type="text" id="condition" maxlength=64 size=64 placeholder="推測した条件を記入してください。">
 
+    <select name="confidence" id="confidence">
+    <option value=0>自信度を1~7から選択してください。</option>
+    <option value=1>1(非常に自信がない)</option>
+    <option value=2>2</option>
+    <option value=3>3</option>
+    <option value=4>4</option>
+    <option value=5>5</option>
+    <option value=6>6</option>
+    <option value=7>7(非常に自信がある)</option>    
+    </select>
+
+
     <center>
     <canvas id="canvas" width="1500" height="700"></canvas>
     </center>
